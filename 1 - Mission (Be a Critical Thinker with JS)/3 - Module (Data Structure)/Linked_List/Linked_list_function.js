@@ -66,6 +66,10 @@ class LinkedList {
         this.length++
     }
 
+    remove(index, value){
+        
+    }
+
     _traverseOfIndex(index) {
         let temp = this.head
         let count = 0
