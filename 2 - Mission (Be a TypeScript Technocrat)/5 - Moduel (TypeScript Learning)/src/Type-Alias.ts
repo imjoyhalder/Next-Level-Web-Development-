@@ -1,33 +1,21 @@
 
-const user: {
-    id: number,
+type User = {
+    id: number;
     name: {
         firstName: string;
         lastName: string;
-    },
-    gender: 'male' | 'female',
-    contactNo: string,
+    };
+    gender: 'male' | 'female';
+    contactNo: string;
     address: {
-        division: string,
-        city: string
+        division: string;
+        city: string;
     }
 
-} = {
-    id: 1234, 
-    name: {
-        firstName: 'Joy', 
-        lastName: "Halder"
-    }, 
-    gender: 'male', 
-    contactNo: '01212', 
-    address: {
-        division: 'Barishal', 
-        city: 'Gournodi'
-    }
 }
 
 
-const user2: user =  {
+const user2: User =  {
     id: 1234, 
     name: {
         firstName: 'Himel', 
@@ -41,4 +29,10 @@ const user2: user =  {
     }
 }
 
-console.log(user2);
+// function 
+
+type addFunc = (num1: number ,num2: number) =>number
+
+const add: addFunc = (num1, num2) => num1+num2
+
+console.log(add(1,3));
