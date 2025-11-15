@@ -1,5 +1,8 @@
 class Parent{
-    constructor(public name: string, public age: number, public address: string){
+    name:string; 
+    age: number; 
+    address: string; 
+    constructor(name: string, age: number, address: string){
         this.name = name
         this.age = age 
         this.address = address
@@ -11,9 +14,25 @@ class Parent{
     }
 }
 
+class Teacher extends Parent{
+    designation: string 
+    constructor(name: string, age: number, address: string, designation: string ){
+        super(name,age,address)
+        this.designation = designation
+    }
+
+    takeClass(numberHours: number){
+        return `${this.name} take ${numberHours} class`
+    }
+}
+
+const teacher1 = new Teacher("Joy", 21, 'Barisal', 'Senior teacher')
+console.log(teacher1.takeClass(23));
+
 class Student extends Parent{
-    constructor(public name: string, public age: number, public address: string){
+    constructor(name: string, age: number, address: string){
         super(name,age,address)
         
     }
 }
+
