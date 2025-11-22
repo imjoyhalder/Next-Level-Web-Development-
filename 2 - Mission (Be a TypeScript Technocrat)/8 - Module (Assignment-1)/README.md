@@ -1,20 +1,49 @@
-##1 . Interface vs Type
+**1. Interface vs Type**
 
-TypeScript-এ interface এবং type দুটোই কোনো object-এর structure বা data-এর structure নির্ধারণ করতে ব্যবহার হয়। তবে এদের মধ্যে কিছু গুরুত্বপূর্ণ পার্থক্য আছে।
+1. Interface শুধুমাত্র object-এর shape define করতে বেশি ব্যবহৃত হয়
+2. Type দিয়ে union, primitive alias define করা যায় 
+3. Interface extend করা হয় extends কীওয়ার্ড ব্যবহার করে 
+4. Type extend করা হয় & (intersection ) ব্যবহার করে 
+5. Union, Intersection, Conditional Type—এগুলো Interface দিয়ে করা যায় না।
 
-Interface একাধিক বার একই নামে declare করা যায় এবং এগুলো merge হয়ে যায়।
-Type কখনো merge হয় না, একই নাম আবার দিলে error হয়।
-
-Type দিয়ে সহজেই union এবং intersection তৈরি করা যায়। Interface union করতে পারে না
+**Example of Interface:**
 ```ts
-type ID = string | number;       // Union
-type User = Person & Address;    // Intersection
+    interface Animal {
+      name: string;
+    }
+
+    interface Dog extends Animal {
+      breed: string;
+    }
 ```
 
-Interface সহজে অন্য interface কে extend করতে পারে।
-Type-এ extend নেই, তবে intersection (&) দিয়ে একই কাজ করা যায়।
-
+**Example of Type:** 
 ```ts
-interface A { name: string }
-interface B extends A { age: number }
+type Animal = {
+  name: string;
+};
+
+type Dog = Animal & {
+  breed: string;
+};
 ```
+
+**2.Use of the keyof keyword in TypeScript**
+TypeScript-এ keyof keyword ব্যবহার করা হয় কোনো object type-এর সবগুলো key-এর নামকে একটি union type হিসেবে পাওয়ার জন্য। Object-এর key-গুলো ভুল লেখা থেকে বাঁচায়।
+
+**Example of keyof :**
+```ts
+type User = {
+name: string;
+age: number;
+email: string;
+};
+type UserKeys = keyof User; 
+// UserKeys = "name" | "age" | "email"
+```
+
+
+
+
+
+

@@ -1,22 +1,22 @@
 
-type T = string|number|boolean
+type T = string | number | boolean
 
-const formatValue = (value: T): T=>{
-    if(typeof value ===  'number'){
-        return value*10
+const formatValue = (value: T): T => {
+    if (typeof value === 'number') {
+        return value * 10
     }
-    else if(typeof value==='string'){
+    else if (typeof value === 'string') {
         return value.toUpperCase()
     }
-    else{
+    else {
         return !value
     }
 }
 
 
 
-const getLength  = (input: string | number[]): number=>{
-    if(typeof input === 'string'){
+const getLength = (input: string | number[]): number => {
+    if (typeof input === 'string') {
         return input.length
     }
     else {
@@ -25,15 +25,15 @@ const getLength  = (input: string | number[]): number=>{
 }
 
 
-class Person{
-    name: string; 
-    age: number; 
-    constructor(name: string, age: number){
+class Person {
+    name: string;
+    age: number;
+    constructor(name: string, age: number) {
         this.name = name
         this.age = age
     }
 
-    getDetails(){
+    getDetails() {
         return `'Name: ${this.name}, Age: ${this.age}'`
     }
 }
@@ -44,8 +44,8 @@ type bookTyp = {
     rating: number
 }
 
-const filterByRating = (books: bookTyp[]):  bookTyp[] => {
-    const filteredBooks =books.filter((book)=> book.rating>=4)
+const filterByRating = (books: bookTyp[]): bookTyp[] => {
+    const filteredBooks = books.filter((book) => book.rating >= 4)
     return filteredBooks
 }
 
@@ -71,13 +71,13 @@ interface Book {
     isAvailable: boolean
 }
 
-const printBookDetails = (book: Book): string => {
-    return `Title: ${book.title}, Author: ${book.author}, Published: ${book.publishedYear}, Available: ${book.isAvailable ? 'Yes' : 'No'}`;
+const printBookDetails = (book: Book) => {
+    console.log(`Title: ${book.title}, Author: ${book.author}, Published: ${book.publishedYear}, Available: ${book.isAvailable ? 'Yes' : 'No'}`);;
 }
 
 
 
-type generic = Array<number|string>
+type generic = Array<number | string>
 const getUniqueValues = (arr1: generic, arr2: generic): generic => {
 
     const mergedArray: generic = []
@@ -118,7 +118,7 @@ type Product = {
 
 const calculateTotalPrice = (products: Product[]): number => {
 
-    if (products.length===0) {
+    if (products.length === 0) {
         return 0
     }
     else {
