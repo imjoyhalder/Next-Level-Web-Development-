@@ -1,3 +1,5 @@
+import { writeUsers } from './../helpers/fileDb';
+import { readUsers } from "../helpers/fileDb"
 import paresBody from "../helpers/parseBody"
 import addRoutes from "../helpers/RouteHandler"
 import { sendJson } from "../helpers/sendJson"
@@ -19,6 +21,13 @@ addRoutes('GET', '/api', (req, res) => {
 addRoutes("POST", '/api/users', async(req, res) => {
     try {
         const body = await paresBody(req)
+        const users = readUsers()
+        const newUser = {
+            id: Date.now(), 
+            ...body
+        }
+        users.push(newUser)
+        writeUsers(users)
         sendJson(res, 201, {success: true, data: body})
     } catch (error: any) {
         console.log(error.message);
