@@ -2,29 +2,12 @@
 import http, { IncomingMessage, Server, ServerResponse } from 'http'
 import path from 'path';
 import config from './config';
-import addRoutes, { RouteHandler, routes } from './helpers/RouteHandler';
+import { RouteHandler, routes } from './helpers/RouteHandler';
+import './routes'
 
-addRoutes('GET', "/", (req, res) => {
-    res.writeHead(200, { 'content-type': 'application/json' })
-    res.end(JSON.stringify({
-        message: 'Hello from node js with TypeScript...',
-        path: req.url
-    }))
-})
 
 const server: Server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
     
-    // console.log(`Server is running .......`);
-    // if (req.url == '/' && req.method == "GET") {
-    //     res.writeHead(200, { 'content-type': 'application/json' })
-    //     res.end(JSON.stringify({
-    //         message: 'Hello from node js with TypeScript...',
-    //         path: req.url
-    //     }))
-    // }
-
-
-
     const method = req.method?.toUpperCase() || ''
     const path = req.url || '';
 
