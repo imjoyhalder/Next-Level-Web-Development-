@@ -2,44 +2,76 @@
 import http, { IncomingMessage, Server, ServerResponse } from 'http'
 import path from 'path';
 import config from './config';
+import addRoutes, { RouteHandler, routes } from './helpers/RouteHandler';
+
+addRoutes('GET', "/", (req, res) => {
+    res.writeHead(200, { 'content-type': 'application/json' })
+    res.end(JSON.stringify({
+        message: 'Hello from node js with TypeScript...',
+        path: req.url
+    }))
+})
 
 const server: Server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+    
     // console.log(`Server is running .......`);
-    if (req.url == '/' && req.method == "GET") {
-        res.writeHead(200, { 'content-type': 'application/json' })
+    // if (req.url == '/' && req.method == "GET") {
+    //     res.writeHead(200, { 'content-type': 'application/json' })
+    //     res.end(JSON.stringify({
+    //         message: 'Hello from node js with TypeScript...',
+    //         path: req.url
+    //     }))
+    // }
+
+
+
+    const method = req.method?.toUpperCase() || ''
+    const path = req.url || '';
+
+    const methodMap = routes.get(method)
+    const handler: RouteHandler | undefined = methodMap?.get(path)
+
+    if (handler) {
+        handler(req, res)
+    }
+    else {
+        res.writeHead(404, { 'content-type': 'application/json' })
         res.end(JSON.stringify({
-            message: 'Hello from node js with TypeScript...',
-            path: req.url
+            success: 'false',
+            message: "Route not found!!!",
+            path
         }))
     }
 
-    if (req.url == '/api' && req.method == "GET") {
 
-        res.writeHead(200, { 'content-type': 'application/json' })
-        res.end(JSON.stringify({
-            message: 'Health status ok...',
-            path: req.url
-        }))
-    }
 
-    if (req.url == '/api/users' && req.method == "POST") {
-        let body = ''
+    // if (req.url == '/api' && req.method == "GET") {
 
-        req.on('data', (chunk) => {
-            body += chunk
-        })
+    //     res.writeHead(200, { 'content-type': 'application/json' })
+    //     res.end(JSON.stringify({
+    //         message: 'Health status ok...',
+    //         path: req.url
+    //     }))
+    // }
 
-        req.on('end', () => {
-            try {
-                const pareBody = JSON.parse(body);
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                console.log(pareBody);
-                res.end(JSON.stringify(pareBody))
-            } catch (error:any) {
-                console.log(error?.message);
-            }
-        })
-    }
+    // if (req.url == '/api/users' && req.method == "POST") {
+    //     let body = ''
+
+    //     req.on('data', (chunk) => {
+    //         body += chunk
+    //     })
+
+    //     req.on('end', () => {
+    //         try {
+    //             const pareBody = JSON.parse(body);
+    //             res.writeHead(200, { 'Content-Type': 'application/json' });
+    //             console.log(pareBody);
+    //             res.end(JSON.stringify(pareBody))
+    //         } catch (error: any) {
+    //             console.log(error?.message);
+    //         }
+    //     })
+    // }
 
 })
 
