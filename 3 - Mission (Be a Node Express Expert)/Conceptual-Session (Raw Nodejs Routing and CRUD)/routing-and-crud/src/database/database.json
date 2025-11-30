@@ -1,3 +1,17 @@
 [
-    {}
+    {
+        "id": 1, 
+        "name": "T-shirt", 
+        "color": "Red"
+    },
+    {
+        "id": 2, 
+        "name": "Shirt", 
+        "color": "Green"
+    },
+    {
+        "id": 3, 
+        "name": "T-shirt", 
+        "color": "White"
+    }
 ]
