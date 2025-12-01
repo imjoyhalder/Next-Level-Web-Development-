@@ -13,8 +13,8 @@ app.use(express.urlencoded())
 
 //DB
 const pool = new Pool({
-    //connectionString : `postgresql://neondb_owner:npg_TeHIo0clQr1p@ep-dry-boat-a4vwagqk-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require`
-    connectionString: process.env.PG
+    
+    connectionString: process.env.CONNECTION_STR
 })
 
 
@@ -28,6 +28,19 @@ const initDB = async () => {
             phone VARCHAR(15), 
             address TEXT, 
             created_at TIMESTAMP DEFAULT NOW(), 
+            updated_at TIMESTAMP DEFAULT NOW()
+        )
+    `)
+
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS todos(
+            id SERIAL PRIMARY KEY, 
+            user_id INT REFERENCES users(id) ON DELETE CASCADE,
+            title VARCHAR(200) NOT NULL, 
+            description TEXT, 
+            completed BOOLEAN DEFAULT false, 
+            due_date DATE, 
+            created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         )
     `)
