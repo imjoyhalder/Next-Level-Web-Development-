@@ -1,4 +1,4 @@
-import express, { Response, Request } from 'express'
+import express, { Response, Request, NextFunction } from 'express'
 import { Pool, Result } from 'pg'
 import dotenv from "dotenv"
 
@@ -48,7 +48,13 @@ const initDB = async () => {
 
 initDB()
 
-app.get('/', (req: Request, res: Response) => {
+
+const logger = (req: Request, res: Response, next: NextFunction) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    next();
+};
+
+app.get('/', logger, (req: Request, res: Response) => {
     res.send('Hello Next Level Developer')
 })
 
@@ -294,13 +300,13 @@ app.put('/todos/:id', async (req: Request, res: Response) => {
 app.delete('/todos/:id', async (req: Request, res: Response) => {
     try {
         const result = await pool.query(`DELETE FROM todos WHERE id=$1`, [req.params.id])
-        if(result.rowCount == 0){
+        if (result.rowCount == 0) {
             res.status(404).json({
                 success: false,
                 message: 'Todo not found'
             })
         }
-        else{
+        else {
             res.status(201).json({
                 success: true,
                 message: 'Todo deleted successfully',
@@ -312,6 +318,15 @@ app.delete('/todos/:id', async (req: Request, res: Response) => {
             message: error.message
         })
     }
+})
+
+// not found route
+app.use((req: Request, res: Response) => {
+    res.status(404).json({
+        success: false,
+        message: 'Route not found',
+        path: req.path
+    })
 })
 
 
