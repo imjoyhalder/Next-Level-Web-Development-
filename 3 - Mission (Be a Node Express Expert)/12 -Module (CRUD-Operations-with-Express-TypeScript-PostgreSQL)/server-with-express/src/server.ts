@@ -72,6 +72,7 @@ app.post('/users', async (req: Request, res: Response) => {
 
 })
 
+//get all users
 app.get('/users', async(req: Request, res: Response)=>{
     try {
         
@@ -106,6 +107,35 @@ app.get('/users/:id', async(req: Request, res: Response)=>{
             res.status(200).json({
                 success: true,
                 message: 'User fetched successfully', 
+                data: result.rows[0]
+            })
+        }
+    } catch (error:any) {
+        res.status(500).json({
+            success: false, 
+            message: error.message
+        })
+    }
+})
+
+// update single user
+app.put('/users/:id', async(req: Request, res: Response)=>{
+    try {
+        const {id} = req.params; 
+        const {name, email} = req.body; 
+        console.log(req.body);
+        const result = await pool.query(`UPDATE users SET name=$1, email=$2 WHERE id=$3 RETURNING *`, [name,email,id])
+        
+        if(result.rows.length===0){
+            res.status(404).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+        else{
+            res.status(200).json({
+                success: true,
+                message: 'User updated successfully', 
                 data: result.rows[0]
             })
         }
