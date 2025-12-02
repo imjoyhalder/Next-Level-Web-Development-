@@ -194,6 +194,7 @@ app.post('/todos', async (req: Request, res: Response) => {
     }
 })
 
+// get single todo
 app.get('/todos/:id', async (req: Request, res: Response) => {
     try {
         const result = await pool.query(`SELECT * FROM todos WHERE id = $1`, [req.params.id])
@@ -219,6 +220,7 @@ app.get('/todos/:id', async (req: Request, res: Response) => {
     }
 })
 
+// get all todos
 app.get('/todos', async (req: Request, res: Response) => {
     try {
         const result = await pool.query(`SELECT * FROM todos `)
@@ -235,7 +237,83 @@ app.get('/todos', async (req: Request, res: Response) => {
     }
 })
 
-// app.get('/todos')
+// get todo by user id 
+app.get('/todos/users/:id', async (req: Request, res: Response) => {
+    try {
+        const result = await pool.query(`SELECT FROM todos WHERE user_id=$1`, [req.params.id])
+        if (result.rows.length === 0) {
+            res.status(201).json({
+                success: false,
+                message: ' todos not found',
+            })
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: ' todos fetched successfully',
+                data: result.rows
+            })
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// update todo
+app.put('/todos/:id', async (req: Request, res: Response) => {
+    try {
+        const { title, description } = req.body;
+        const result = await pool.query('UPDATE todos SET title=$1, description=$2 WHERE id=$3 RETURNING *', [
+            title, description, req.params.id
+        ])
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: 'Todo updated successfully',
+                data: result.rows[0]
+            })
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// delete single todo
+app.delete('/todos/:id', async (req: Request, res: Response) => {
+    try {
+        const result = await pool.query(`DELETE FROM todos WHERE id=$1`, [req.params.id])
+        if(result.rowCount == 0){
+            res.status(404).json({
+                success: false,
+                message: 'Todo not found'
+            })
+        }
+        else{
+            res.status(201).json({
+                success: true,
+                message: 'Todo deleted successfully',
+            })
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
