@@ -52,7 +52,8 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello Next Level Developer')
 })
 
-// users CRUD
+// ----------------users CRUD--------------------
+
 app.post('/users', async (req: Request, res: Response) => {
     const { name, email } = req.body;
 
@@ -152,7 +153,7 @@ app.delete('/users/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const result = await pool.query(`DELETE FROM users WHERE id=$1 RETURNING *`, [id])
-        if (result.rows.length == 0) {
+        if (result.rowCount === 0) {
             res.status(404).json({
                 success: false,
                 message: 'user not found'
@@ -162,7 +163,7 @@ app.delete('/users/:id', async (req: Request, res: Response) => {
             res.status(500).json({
                 success: false,
                 message: 'user deleted successfully',
-                data: result.rows[0]
+                data: result.rows
             })
         }
     } catch (error: any) {
@@ -172,6 +173,28 @@ app.delete('/users/:id', async (req: Request, res: Response) => {
         })
     }
 })
+
+// -----------todos CRUD--------------
+app.post('/todos', async (req: Request, res: Response) => {
+    try {
+        const { user_id, title, description } = req.body
+        const result = await pool.query(`INSERT INTO todos (user_id, title, description) VALUES ($1,$2,$3) RETURNING *`, [
+            user_id, title, description
+        ])
+        res.status(200).json({
+            success: true,
+            message: 'todos created successfully',
+            data: result.rows[0]
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// app.get('/todos')
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
