@@ -73,75 +73,101 @@ app.post('/users', async (req: Request, res: Response) => {
 })
 
 //get all users
-app.get('/users', async(req: Request, res: Response)=>{
+app.get('/users', async (req: Request, res: Response) => {
     try {
-        
+
         const result = await pool.query(`SELECT * FROM users`)
         res.status(200).json({
-            success: true, 
+            success: true,
             message: "Users retrieved successfully ",
             data: result.rows
         })
-    } catch (error:any) {
+    } catch (error: any) {
         res.status(500).json({
-            success: false, 
-            message: error.message, 
+            success: false,
+            message: error.message,
             details: error
         })
     }
 })
 
 //get single users
-app.get('/users/:id', async(req: Request, res: Response)=>{
+app.get('/users/:id', async (req: Request, res: Response) => {
     try {
-        const {id} = req.params; 
-        const result = await pool.query(`SELECT * FROM users WHERE id = $1`,[req.params.id])
-        
-        if(result.rows.length===0){
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [req.params.id])
+
+        if (result.rows.length === 0) {
             res.status(404).json({
                 success: false,
                 message: 'User not found'
             })
         }
-        else{
+        else {
             res.status(200).json({
                 success: true,
-                message: 'User fetched successfully', 
+                message: 'User fetched successfully',
                 data: result.rows[0]
             })
         }
-    } catch (error:any) {
+    } catch (error: any) {
         res.status(500).json({
-            success: false, 
+            success: false,
             message: error.message
         })
     }
 })
 
 // update single user
-app.put('/users/:id', async(req: Request, res: Response)=>{
+app.put('/users/:id', async (req: Request, res: Response) => {
     try {
-        const {id} = req.params; 
-        const {name, email} = req.body; 
+        const { id } = req.params;
+        const { name, email } = req.body;
         console.log(req.body);
-        const result = await pool.query(`UPDATE users SET name=$1, email=$2 WHERE id=$3 RETURNING *`, [name,email,id])
-        
-        if(result.rows.length===0){
+        const result = await pool.query(`UPDATE users SET name=$1, email=$2 WHERE id=$3 RETURNING *`, [name, email, id])
+
+        if (result.rows.length === 0) {
             res.status(404).json({
                 success: false,
                 message: 'User not found'
             })
         }
-        else{
+        else {
             res.status(200).json({
                 success: true,
-                message: 'User updated successfully', 
+                message: 'User updated successfully',
                 data: result.rows[0]
             })
         }
-    } catch (error:any) {
+    } catch (error: any) {
         res.status(500).json({
-            success: false, 
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// delete single user 
+app.delete('/users/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query(`DELETE FROM users WHERE id=$1 RETURNING *`, [id])
+        if (result.rows.length == 0) {
+            res.status(404).json({
+                success: false,
+                message: 'user not found'
+            })
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: 'user deleted successfully',
+                data: result.rows[0]
+            })
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
             message: error.message
         })
     }
