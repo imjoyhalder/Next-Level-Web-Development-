@@ -59,8 +59,34 @@ const getSingleTodo = async (req: Request, res: Response) => {
     }
 }
 
+const getTodoByUserId = async (req: Request, res: Response) => {
+    try {
+        const result = await todoServices.getTodoByUserId(req.params.id!)
+        if (result.rows.length === 0) {
+            res.status(201).json({
+                success: false,
+                message: ' todos not found',
+            })
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: ' todos fetched successfully',
+                data: result.rows
+            })
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
 export const todoControllers = {
     createTodo, 
     getAllTodo, 
     getSingleTodo,
+    getTodoByUserId,
+    
 }

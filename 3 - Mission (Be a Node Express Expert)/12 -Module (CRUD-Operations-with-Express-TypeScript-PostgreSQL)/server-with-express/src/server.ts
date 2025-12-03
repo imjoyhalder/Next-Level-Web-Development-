@@ -59,7 +59,7 @@ app.use('/todos', todoRoutes)
 // get todo by user id 
 app.get('/todos/users/:id', async (req: Request, res: Response) => {
     try {
-        const result = await pool.query(`SELECT FROM todos WHERE user_id=$1`, [req.params.id])
+        const result = await pool.query(`SELECT * FROM todos WHERE user_id=$1`, [req.params.id])
         if (result.rows.length === 0) {
             res.status(201).json({
                 success: false,
