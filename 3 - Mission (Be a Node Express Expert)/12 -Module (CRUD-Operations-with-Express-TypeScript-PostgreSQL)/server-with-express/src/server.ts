@@ -2,6 +2,8 @@ import express, { Response, Request, NextFunction } from 'express'
 import { Pool, Result } from 'pg'
 import config from './config'
 import initDB, { pool } from './config/db';
+import logger from './middleware/logger';
+import { UserRoutes } from './modules/user/user.routes';
 
 
 const app = express()
@@ -12,14 +14,9 @@ const port = config.port;
 app.use(express.json())
 app.use(express.urlencoded())
 
-
+// initialize DB
 initDB()
 
-
-const logger = (req: Request, res: Response, next: NextFunction) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-    next();
-};
 
 app.get('/', logger, (req: Request, res: Response) => {
     res.send('Hello Next Level Developer')
@@ -27,43 +24,9 @@ app.get('/', logger, (req: Request, res: Response) => {
 
 // ----------------users CRUD--------------------
 
-app.post('/users', async (req: Request, res: Response) => {
-    const { name, email } = req.body;
+app.use('/users', UserRoutes)
 
-    try {
-        const result = await pool.query(`INSERT INTO users (name, email) VALUES($1, $2) RETURNING *`,
-            [name, email])
-        res.status(200).json({
-            success: true,
-            message: result.rows[0]
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
 
-})
-
-//get all users
-app.get('/users', async (req: Request, res: Response) => {
-    try {
-
-        const result = await pool.query(`SELECT * FROM users`)
-        res.status(200).json({
-            success: true,
-            message: "Users retrieved successfully ",
-            data: result.rows
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-            details: error
-        })
-    }
-})
 
 //get single users
 app.get('/users/:id', async (req: Request, res: Response) => {
