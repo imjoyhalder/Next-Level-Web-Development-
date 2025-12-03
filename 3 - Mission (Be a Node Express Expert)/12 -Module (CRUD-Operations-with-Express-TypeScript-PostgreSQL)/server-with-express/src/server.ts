@@ -4,6 +4,7 @@ import config from './config'
 import initDB, { pool } from './config/db';
 import logger from './middleware/logger';
 import { UserRoutes } from './modules/user/user.routes';
+import { todoRoutes } from './modules/todo/todo.routes';
 
 
 const app = express()
@@ -22,99 +23,38 @@ app.get('/', logger, (req: Request, res: Response) => {
     res.send('Hello Next Level Developer')
 })
 
-// ----------------users CRUD--------------------
-
+//* user routes
 app.use('/users', UserRoutes)
 
-
-// delete single user 
-app.delete('/users/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    try {
-        const result = await pool.query(`DELETE FROM users WHERE id=$1 RETURNING *`, [id])
-        if (result.rowCount === 0) {
-            res.status(404).json({
-                success: false,
-                message: 'user not found'
-            })
-        }
-        else {
-            res.status(500).json({
-                success: false,
-                message: 'user deleted successfully',
-                data: result.rows
-            })
-        }
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-})
-
-// -----------todos CRUD--------------
-app.post('/todos', async (req: Request, res: Response) => {
-    try {
-        const { user_id, title, description } = req.body
-        const result = await pool.query(`INSERT INTO todos (user_id, title, description) VALUES ($1,$2,$3) RETURNING *`, [
-            user_id, title, description
-        ])
-        res.status(200).json({
-            success: true,
-            message: 'todos created successfully',
-            data: result.rows[0]
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-})
+//* Todo Routes
+app.use('/todos', todoRoutes)
 
 // get single todo
-app.get('/todos/:id', async (req: Request, res: Response) => {
-    try {
-        const result = await pool.query(`SELECT * FROM todos WHERE id = $1`, [req.params.id])
+// app.get('/todos/:id', async (req: Request, res: Response) => {
+//     try {
+//         const result = await pool.query(`SELECT * FROM todos WHERE id = $1`, [req.params.id])
 
-        if (result.rows.length === 0) {
-            res.status(404).json({
-                success: false,
-                message: 'todo not found'
-            })
-        }
-        else {
-            res.status(200).json({
-                success: true,
-                message: 'Todo fetched successfully',
-                data: result.rows[0]
-            })
-        }
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-})
+//         if (result.rows.length === 0) {
+//             res.status(404).json({
+//                 success: false,
+//                 message: 'todo not found'
+//             })
+//         }
+//         else {
+//             res.status(200).json({
+//                 success: true,
+//                 message: 'Todo fetched successfully',
+//                 data: result.rows[0]
+//             })
+//         }
+//     } catch (error: any) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message
+//         })
+//     }
+// })
 
-// get all todos
-app.get('/todos', async (req: Request, res: Response) => {
-    try {
-        const result = await pool.query(`SELECT * FROM todos `)
-        res.status(201).json({
-            success: true,
-            message: 'All todos fetched successfully',
-            data: result.rows
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-})
 
 // get todo by user id 
 app.get('/todos/users/:id', async (req: Request, res: Response) => {
