@@ -1,13 +1,13 @@
 import express, { Request, Response } from "express"
-import { pool } from "../../config/db";
 import { userControllers } from "./user.controller";
+import auth from "../../middleware/auth";
 
 
 const router = express.Router()
 
-router.post('/', userControllers.createUser)
+router.post('/',  userControllers.createUser)
 
-router.get('/', userControllers.getAllUser)
+router.get('/', auth(), userControllers.getAllUser)
 
 router.get('/:id', userControllers.getSingleUser)
 
