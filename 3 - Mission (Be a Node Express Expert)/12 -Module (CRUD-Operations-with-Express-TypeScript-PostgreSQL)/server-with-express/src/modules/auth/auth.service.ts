@@ -19,6 +19,7 @@ const loginUser = async (email: string, password: string) => {
     const payload = {
         name: user.name,
         email: user.email,
+        role: user.role
     }
 
     const token = jwt.sign(payload, config.jwtSecret!, {
