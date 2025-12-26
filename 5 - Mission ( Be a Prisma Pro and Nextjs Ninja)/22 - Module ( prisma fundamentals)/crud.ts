@@ -27,6 +27,6 @@ const run = async () => {
             userId: 1
         }
     })
-    console.log(createProfile);
+
 }
 run()
