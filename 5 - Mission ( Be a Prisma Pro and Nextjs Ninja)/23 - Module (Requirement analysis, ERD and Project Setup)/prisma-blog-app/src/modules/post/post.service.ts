@@ -10,6 +10,7 @@ const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt'>)=>{
 const getPost = async ()=>{
     const result = await prisma.post.findMany()
     return result; 
+    console.log(result)
 }
 
 export const postService = {
