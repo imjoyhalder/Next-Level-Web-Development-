@@ -10,22 +10,29 @@ export const auth = betterAuth({
     user: {
         additionalFields: {
             role: {
-                type: "string", 
-                defaultValue: "USER", 
+                type: "string",
+                defaultValue: "USER",
                 required: false
-            }, 
-            phone:{
-                type: "string", 
+            },
+            phone: {
+                type: "string",
                 required: false
-            }, 
+            },
             status: {
-                type: "string", 
-                defaultValue: "ACTIVE", 
+                type: "string",
+                defaultValue: "ACTIVE",
                 required: false
             }
         }
     },
     emailAndPassword: {
         enabled: true,
+        autoSignIn: false,
+        requireEmailVerification: true
+    },
+    emailVerification: {
+        sendVerificationEmail: async ({ user, url, token }, request) => {
+            console.log('Verification email send');
+        },
     },
 });
