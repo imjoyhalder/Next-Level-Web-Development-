@@ -1,11 +1,11 @@
-import { Router } from './../../../node_modules/@types/express-serve-static-core/index.d';
-import  express  from 'express';
+import express from 'express';
 import { PostController } from './post.controller';
 
+import  auth,{ UserRole} from '../../middlewares/auth';
 
 const router = express.Router()
 
-router.post('/',PostController.createPost)
+router.post('/', auth(UserRole.USER), PostController.createPost)
 router.get('/', PostController.getAllPost)
 
-export const postRouter = router ;
+export const postRouter = router;
