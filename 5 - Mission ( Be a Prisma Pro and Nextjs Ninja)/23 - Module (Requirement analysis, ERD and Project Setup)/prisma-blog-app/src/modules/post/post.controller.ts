@@ -1,7 +1,7 @@
 import { string } from 'better-auth';
 import { Request, Response } from "express"
 import { postService } from "./post.service";
-import { Post } from "../../../generated/prisma/client";
+import { Post, PostStatus } from "../../../generated/prisma/client";
 
 
 const createPost = async (req: Request, res: Response) => {
@@ -30,6 +30,7 @@ const getAllPost = async (req: Request, res: Response) => {
         const searchString = typeof search === "string" ? search : undefined
 
         const tags = req.query.tags ? (req.query.tags as string).split(',') : []
+
         const isFeatured = req.query.isFeatured
             ? req.query.isFeatured === "true"
                 ? true
@@ -38,7 +39,11 @@ const getAllPost = async (req: Request, res: Response) => {
                     : undefined
             : undefined
 
-        const result = await postService.getAllPost({ search: searchString, tags, isFeatured });
+        const status = req.query.status as PostStatus | undefined
+
+        const authorId = req.query.authorId as string | undefined
+
+        const result = await postService.getAllPost({ search: searchString, tags, isFeatured, status, authorId });
         res.status(200).send(result)
     } catch (error: any) {
         res.status(400).json({

@@ -1,5 +1,5 @@
 import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
-import { Post } from "../../../generated/prisma/client";
+import { Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>, userId: string) => {
@@ -18,8 +18,10 @@ const getAllPost = async (payload: {
     search: string | undefined
     tags: string[] | []
     isFeatured: boolean | undefined
+    status: PostStatus | undefined
+    authorId: string | undefined
 }) => {
-    const { search, tags, isFeatured } = payload
+    const { search, tags, isFeatured, status, authorId } = payload
     const andConditions: PostWhereInput[] = []
 
     if (search) {
@@ -58,6 +60,18 @@ const getAllPost = async (payload: {
     if(typeof isFeatured === 'boolean'){
         andConditions.push({
             isFeatured
+        })
+    }
+
+    if(status){
+        andConditions.push({
+            status
+        })
+    }
+    
+    if(authorId){
+        andConditions.push({
+            authorId
         })
     }
 
