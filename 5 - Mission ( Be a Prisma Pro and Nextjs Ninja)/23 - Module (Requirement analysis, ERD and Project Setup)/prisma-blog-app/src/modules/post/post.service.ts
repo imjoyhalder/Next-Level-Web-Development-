@@ -17,8 +17,9 @@ const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt' | 'a
 const getAllPost = async (payload: {
     search: string | undefined
     tags: string[] | []
+    isFeatured: boolean | undefined
 }) => {
-    const { search, tags } = payload
+    const { search, tags, isFeatured } = payload
     const andConditions: PostWhereInput[] = []
 
     if (search) {
@@ -51,6 +52,12 @@ const getAllPost = async (payload: {
             tags: {
                 hasEvery: payload.tags as string[]
             }
+        })
+    }
+
+    if(typeof isFeatured === 'boolean'){
+        andConditions.push({
+            isFeatured
         })
     }
 
