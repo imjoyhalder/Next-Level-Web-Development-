@@ -1,4 +1,4 @@
-import { Result } from './../../../generated/prisma/internal/prismaNamespace';
+import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
 import { Post } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
@@ -14,9 +14,15 @@ const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt' | 'a
     return result;
 }
 
-const getAllPost = async (payload: { search: string | undefined }) => {
-    const result = await prisma.post.findMany({
-        where: {
+const getAllPost = async (payload: {
+    search: string | undefined
+    tags: string[] | []
+}) => {
+    const { search, tags } = payload
+    const andConditions: PostWhereInput[] = []
+
+    if (search) {
+        andConditions.push({
             OR: [
                 {
                     title: {
@@ -29,15 +35,28 @@ const getAllPost = async (payload: { search: string | undefined }) => {
                         contains: payload.search as string,
                         mode: "insensitive",
                     }
-                }, 
+                },
                 {
                     tags: {
-                        has: payload.search as string, 
-                        
+                        has: payload.search as string,
+
                     }
                 }
             ]
+        })
+    }
 
+    if (tags.length > 0) {
+        andConditions.push({
+            tags: {
+                hasEvery: payload.tags as string[]
+            }
+        })
+    }
+
+    const result = await prisma.post.findMany({
+        where: {
+            AND: andConditions
         }
     })
     return result;
