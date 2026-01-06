@@ -1,3 +1,4 @@
+import { string } from 'better-auth';
 import { Request, Response } from "express"
 import { postService } from "./post.service";
 import { Post } from "../../../generated/prisma/client";
@@ -5,8 +6,8 @@ import { Post } from "../../../generated/prisma/client";
 
 const createPost = async (req: Request, res: Response) => {
     try {
-    
-        if(!req?.user){
+
+        if (!req?.user) {
             return res.status(400).json({
                 error: 'Unauthorized!'
             })
@@ -25,7 +26,9 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPost = async (req: Request, res: Response) => {
     try {
-        const result = await postService.getPost();
+        const { search } = req.query;
+        const searchString = typeof search === "string" ? search : undefined
+        const result = await postService.getAllPost({search: searchString});
         res.status(200).send(result)
     } catch (error: any) {
         res.status(400).json({
