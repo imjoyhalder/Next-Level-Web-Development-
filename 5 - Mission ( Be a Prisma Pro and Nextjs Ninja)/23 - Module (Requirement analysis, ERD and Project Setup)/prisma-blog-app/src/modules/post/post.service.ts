@@ -1,6 +1,7 @@
 import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
+import { title } from 'node:process';
 
 const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>, userId: string) => {
     const result = await prisma.post.create(
@@ -23,8 +24,10 @@ const getAllPost = async (payload: {
     page: number
     limit: number
     skip: number
+    sortBy: string | undefined
+    sortOrder: string | undefined
 }) => {
-    const { search, tags, isFeatured, status, authorId, page, limit, skip } = payload
+    const { search, tags, isFeatured, status, authorId, page, limit, skip, sortBy, sortOrder } = payload
     const andConditions: PostWhereInput[] = []
 
     if (search) {
@@ -79,12 +82,16 @@ const getAllPost = async (payload: {
     }
 
 
+
     const result = await prisma.post.findMany({
         take: limit,
         skip: skip,
         where: {
             AND: andConditions
-        }
+        },
+        orderBy: sortBy && sortOrder ?
+            { [sortBy]: sortOrder }
+            : { createdAt: 'desc' }
     })
 
     return result;
