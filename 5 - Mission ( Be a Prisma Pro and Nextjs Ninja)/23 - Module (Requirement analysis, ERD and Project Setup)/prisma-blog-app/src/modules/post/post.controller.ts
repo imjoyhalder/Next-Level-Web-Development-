@@ -39,11 +39,17 @@ const getAllPost = async (req: Request, res: Response) => {
                     : undefined
             : undefined
 
+        // get status form query
         const status = req.query.status as PostStatus | undefined
 
+        // authorId get form query
         const authorId = req.query.authorId as string | undefined
 
-        const result = await postService.getAllPost({ search: searchString, tags, isFeatured, status, authorId });
+        // get page and limit from query
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
+
+        const result = await postService.getAllPost({ search: searchString, tags, isFeatured, status, authorId, page, limit });
         res.status(200).send(result)
     } catch (error: any) {
         res.status(400).json({
