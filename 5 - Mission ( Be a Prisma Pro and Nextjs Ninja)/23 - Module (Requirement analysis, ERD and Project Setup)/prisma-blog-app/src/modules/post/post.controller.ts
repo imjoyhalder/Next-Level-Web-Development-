@@ -48,8 +48,9 @@ const getAllPost = async (req: Request, res: Response) => {
         // get page and limit from query
         const page = Number(req.query.page)
         const limit = Number(req.query.limit)
+        const skip = (page-1)*limit
 
-        const result = await postService.getAllPost({ search: searchString, tags, isFeatured, status, authorId, page, limit });
+        const result = await postService.getAllPost({ search: searchString, tags, isFeatured, status, authorId, page, limit, skip });
         res.status(200).send(result)
     } catch (error: any) {
         res.status(400).json({
