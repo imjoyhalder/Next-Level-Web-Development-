@@ -24,8 +24,8 @@ const getAllPost = async (payload: {
     page: number
     limit: number
     skip: number
-    sortBy: string | undefined
-    sortOrder: string | undefined
+    sortBy: string
+    sortOrder: string
 }) => {
     const { search, tags, isFeatured, status, authorId, page, limit, skip, sortBy, sortOrder } = payload
     const andConditions: PostWhereInput[] = []
@@ -89,9 +89,9 @@ const getAllPost = async (payload: {
         where: {
             AND: andConditions
         },
-        orderBy: sortBy && sortOrder ?
+        orderBy:
             { [sortBy]: sortOrder }
-            : { createdAt: 'desc' }
+
     })
 
     return result;
