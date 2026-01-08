@@ -90,8 +90,16 @@ const getAllPost = async (payload: {
         where: {
             AND: andConditions
         },
-        orderBy:
-            { [sortBy]: sortOrder }
+        orderBy: {
+            [sortBy]: sortOrder
+        }, 
+        include: {
+            _count: {
+                select: {
+                    comment: true
+                }
+            }
+        }
 
     })
 
@@ -159,10 +167,10 @@ const getPostById = async (postId: string) => {
                             }
                         }
                     }
-                }, 
+                },
                 count_: {
                     select: {
-                        comment: true 
+                        comment: true
                     }
                 }
             }
