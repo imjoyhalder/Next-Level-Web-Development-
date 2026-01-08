@@ -1,7 +1,8 @@
 import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
-import { Post, PostStatus } from "../../../generated/prisma/client";
+import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { title } from 'node:process';
+import { tuple } from 'better-auth/*';
 
 const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>, userId: string) => {
     const result = await prisma.post.create(
@@ -128,6 +129,42 @@ const getPostById = async (postId: string) => {
         return await tx.post.findUnique({
             where: {
                 id: postId
+            },
+            include: {
+                comment: {
+                    where: {
+                        parentId: null,
+                        status: CommentStatus.APPROVED
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    },
+                    include: {
+                        replies: {
+                            where: {
+                                status: CommentStatus.APPROVED
+                            },
+                            orderBy: {
+                                createdAt: 'desc'
+                            },
+                            include: {
+                                replies: {
+                                    where: {
+                                        status: CommentStatus.APPROVED
+                                    },
+                                    orderBy: {
+                                        createdAt: 'desc'
+                                    },
+                                }
+                            }
+                        }
+                    }
+                }, 
+                count_: {
+                    select: {
+                        comment: true 
+                    }
+                }
             }
         })
     })
