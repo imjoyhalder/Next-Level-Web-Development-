@@ -1,5 +1,6 @@
-import { tuple } from "better-auth/*"
+import { CommentStatus } from './../../../generated/prisma/enums';
 import { prisma } from "../../lib/prisma"
+
 
 const createComment = async (payload:
     {
@@ -86,9 +87,37 @@ const deleteComment = async (commentId: string, userId: string) => {
     })
 }
 
+
+const updateComment = async (commentId: string, updatedData: {content?: string, status?: CommentStatus}, userId: string) => {
+
+    const commentData = await prisma.comment.findUnique({
+        where: {
+            id: commentId,
+            authorId: userId
+        },
+        select: {
+            id: true
+        }
+    })
+    if (!commentData) {
+        throw new Error('Invalid input provided!!')
+    } 
+    return await prisma.comment.update({
+        where:{
+            id: commentId
+        }, 
+        data: {
+            content: updatedData?.content as string, 
+            status: updatedData?.status as CommentStatus
+        }
+    })
+}
+
+
 export const commentService = {
     createComment,
     getCommentById,
     getCommentByAuthor,
-    deleteComment
+    deleteComment,
+    updateComment
 }

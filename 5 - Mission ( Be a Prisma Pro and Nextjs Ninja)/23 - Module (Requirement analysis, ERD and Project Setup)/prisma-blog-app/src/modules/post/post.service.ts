@@ -190,6 +190,7 @@ const getPostById = async (postId: string) => {
 
 }
 
+
 export const postService = {
     createPost,
     getAllPost,
