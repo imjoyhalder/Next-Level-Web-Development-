@@ -69,7 +69,7 @@ const getPostById = async (req: Request, res: Response) => {
 
     } catch (error) {
         res.status(400).json({
-            error: "Post creation failed.",
+            error: "Post fetched failed.",
             details: error
         })
     }

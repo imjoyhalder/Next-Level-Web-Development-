@@ -123,6 +123,17 @@ const getAllPost = async (payload: {
 const getPostById = async (postId: string) => {
 
     return await prisma.$transaction(async (tx) => {
+        
+        const post = await tx.post.findUnique({
+            where: {
+                id: postId
+            }
+        })
+        console.log(post);
+        if(!post){
+            throw new Error('Post not found!')
+        }
+
         await tx.post.update({
             where: {
                 id: postId
@@ -168,7 +179,7 @@ const getPostById = async (postId: string) => {
                         }
                     }
                 },
-                count_: {
+                _count: {
                     select: {
                         comment: true
                     }
