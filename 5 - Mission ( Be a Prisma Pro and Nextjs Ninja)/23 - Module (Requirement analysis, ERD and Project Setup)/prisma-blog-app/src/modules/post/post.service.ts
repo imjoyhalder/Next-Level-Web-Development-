@@ -189,9 +189,18 @@ const getPostById = async (postId: string) => {
 
 }
 
+const getMyPost = async(authorId: string)=>{
+    return await prisma.post.findMany({
+        where: {
+            id: authorId
+        }
+    })
+}
+
 
 export const postService = {
     createPost,
     getAllPost,
-    getPostById
+    getPostById, 
+    getMyPost
 }

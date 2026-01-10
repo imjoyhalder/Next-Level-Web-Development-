@@ -75,8 +75,21 @@ const getPostById = async (req: Request, res: Response) => {
     }
 }
 
+const getMyPost = async (req: Request, res: Response) => {
+    try {
+        
+    } catch (error) {
+        const errorMessage = (error instanceof Error) ? error.message : "Post fetched failed"
+        res.status(400).json({
+            error: errorMessage,
+            details: error
+        })
+    }
+}
+
 export const PostController = {
     createPost,
     getAllPost,
-    getPostById
+    getPostById, 
+    getMyPost
 }
