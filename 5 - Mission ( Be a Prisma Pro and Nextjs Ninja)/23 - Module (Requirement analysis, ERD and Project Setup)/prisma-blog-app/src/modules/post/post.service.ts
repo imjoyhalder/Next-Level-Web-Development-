@@ -129,7 +129,6 @@ const getPostById = async (postId: string) => {
                 id: postId
             }
         })
-        console.log(post);
         if(!post){
             throw new Error('Post not found!')
         }
