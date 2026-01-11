@@ -3,6 +3,7 @@ import { Request, Response } from "express"
 import { postService } from "./post.service";
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { paginationSortingHelper } from '../../helpers/paginationSortingHelper';
+import { prisma } from "../../lib/prisma";
 
 
 const createPost = async (req: Request, res: Response) => {
@@ -118,7 +119,7 @@ const updatePost = async (req: Request, res: Response) => {
         const { postId } = req.params
         const data = req.body
 
-        const result = await postService.updatePost(postId as string, data, user?.id as string, isAdmin as string)
+        const result = await postService.updatePost(postId as string, data, user?.id as string, isAdmin as boolean)
         res.status(200).json(result)
 
     } catch (error) {
@@ -131,10 +132,26 @@ const updatePost = async (req: Request, res: Response) => {
     }
 }
 
+const deletePost = async (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({
+            success: false,
+            message: "You are Unauthorized !!",
+        });
+    }
+    const isAdmin = user.role === "ADMIN"
+    const { postId } = req.params
+
+    const result = await postService.deletePost(postId as string, user.id, isAdmin as boolean)
+    res.status(200).json(result)
+}
+
 export const PostController = {
     createPost,
     getAllPost,
     getPostById,
     getMyPost,
-    updatePost
+    updatePost, 
+    deletePost
 }
