@@ -103,11 +103,37 @@ const getMyPost = async (req: Request, res: Response) => {
 };
 
 
+const updatePost = async (req: Request, res: Response) => {
+    try {
 
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "You are Unauthorized !!",
+            });
+        }
+
+        const { postId } = req.params
+        const data = req.body
+
+        const result = await postService.updatePost(postId as string, data, user?.id as string)
+        res.status(200).json(result)
+
+    } catch (error) {
+        const errorMessage =
+            error instanceof Error ? error.message : "Post update failed"
+        return res.status(400).json({
+            success: false,
+            error: errorMessage,
+        });
+    }
+}
 
 export const PostController = {
     createPost,
     getAllPost,
     getPostById,
-    getMyPost
+    getMyPost,
+    updatePost
 }

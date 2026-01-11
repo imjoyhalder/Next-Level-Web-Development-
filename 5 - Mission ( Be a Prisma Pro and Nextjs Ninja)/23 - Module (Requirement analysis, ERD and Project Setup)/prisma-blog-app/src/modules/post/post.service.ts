@@ -1,4 +1,4 @@
-import { Post } from './../../../generated/prisma/models/Post';
+
 import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
 import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
@@ -195,11 +195,11 @@ const getMyPost = async (userId: string) => {
 
     const userInfo = await prisma.user.findUniqueOrThrow({
         where: {
-            id: userId, 
+            id: userId,
             status: "ACTIVE"
-        }, 
+        },
         select: {
-            id: true, 
+            id: true,
             status: true
         }
     })
@@ -230,11 +230,35 @@ const getMyPost = async (userId: string) => {
     return result
 };
 
+const updatePost = async (postId: string, data: Partial<Post>, authorId: string) => {
+    const postData = await prisma.post.findUniqueOrThrow({
+        where: {
+            id: postId
+        },
+        select: {
+            id: true,
+            authorId: true
+        }
+    })
+
+    if (postData.authorId !== authorId) {
+        throw new Error("You are not author/creator of it")
+    }
+
+    return await prisma.post.update({
+        where: {
+            id: postId
+        },
+        data
+    })
+}
+
 
 
 export const postService = {
     createPost,
     getAllPost,
     getPostById,
-    getMyPost
+    getMyPost,
+    updatePost
 }
