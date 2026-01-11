@@ -114,10 +114,11 @@ const updatePost = async (req: Request, res: Response) => {
             });
         }
 
+        const isAdmin = user.role === "ADMIN"
         const { postId } = req.params
         const data = req.body
 
-        const result = await postService.updatePost(postId as string, data, user?.id as string)
+        const result = await postService.updatePost(postId as string, data, user?.id as string, isAdmin as string)
         res.status(200).json(result)
 
     } catch (error) {
