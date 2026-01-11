@@ -20,7 +20,7 @@ This course focuses on building production-grade web applications from scratch, 
 | **Database** | MySQL, PostgreSQL, Prisma |
 | **DevOps & Cloud** | Docker, AWS (EC2, S3, RDS), GitHub Actions |
 | **Version Control** | Git, GitHub |
-| **Others** | REST API, GraphQL, Authentication (JWT, OAuth), CI/CD |
+| **Others** | REST API, GraphQL, Authentication (JWT, OAuth), CI/CD 
 
 ---
 
