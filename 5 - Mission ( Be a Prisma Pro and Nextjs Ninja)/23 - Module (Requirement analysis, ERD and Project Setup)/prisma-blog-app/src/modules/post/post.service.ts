@@ -1,3 +1,4 @@
+import { Post } from './../../../generated/prisma/models/Post';
 import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
 import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
@@ -191,14 +192,42 @@ const getPostById = async (postId: string) => {
 
 
 const getMyPost = async (userId: string) => {
-    return await prisma.post.findMany({
+
+    const userInfo = await prisma.user.findUniqueOrThrow({
+        where: {
+            id: userId, 
+            status: "ACTIVE"
+        }, 
+        select: {
+            id: true, 
+            status: true
+        }
+    })
+
+    const result = await prisma.post.findMany({
         where: {
             authorId: userId,
         },
         orderBy: {
             createdAt: "desc",
         },
+        include: {
+            _count: {
+                select: {
+                    comment: true
+                }
+            }
+        }
     });
+    // const totalPost = await prisma.post.aggregate({
+    //     _count: {
+    //         id: true
+    //     }, 
+    //     where: {
+    //         authorId: userId,
+    //     }
+    // })
+    return result
 };
 
 
