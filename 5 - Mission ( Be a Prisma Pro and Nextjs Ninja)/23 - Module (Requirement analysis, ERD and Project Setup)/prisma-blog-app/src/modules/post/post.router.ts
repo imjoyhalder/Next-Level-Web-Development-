@@ -7,7 +7,8 @@ const router = express.Router()
 
 router.get('/', PostController.getAllPost)
 router.get("/:postId", PostController.getPostById)
-router.post('/', auth(UserRole.USER), PostController.createPost)
+router.get("/my-posts/author",auth(UserRole.USER, UserRole.ADMIN), PostController.getMyPost)
+router.post('/', auth(UserRole.USER, UserRole.ADMIN), PostController.createPost)
 
 
 

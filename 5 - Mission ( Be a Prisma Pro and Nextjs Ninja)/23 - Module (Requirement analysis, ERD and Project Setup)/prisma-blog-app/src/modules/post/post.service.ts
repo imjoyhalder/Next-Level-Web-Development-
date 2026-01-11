@@ -92,7 +92,7 @@ const getAllPost = async (payload: {
         },
         orderBy: {
             [sortBy]: sortOrder
-        }, 
+        },
         include: {
             _count: {
                 select: {
@@ -123,13 +123,13 @@ const getAllPost = async (payload: {
 const getPostById = async (postId: string) => {
 
     return await prisma.$transaction(async (tx) => {
-        
+
         const post = await tx.post.findUnique({
             where: {
                 id: postId
             }
         })
-        if(!post){
+        if (!post) {
             throw new Error('Post not found!')
         }
 
@@ -189,18 +189,23 @@ const getPostById = async (postId: string) => {
 
 }
 
-const getMyPost = async(authorId: string)=>{
+
+const getMyPost = async (userId: string) => {
     return await prisma.post.findMany({
         where: {
-            id: authorId
-        }
-    })
-}
+            authorId: userId,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+};
+
 
 
 export const postService = {
     createPost,
     getAllPost,
-    getPostById, 
+    getPostById,
     getMyPost
 }
