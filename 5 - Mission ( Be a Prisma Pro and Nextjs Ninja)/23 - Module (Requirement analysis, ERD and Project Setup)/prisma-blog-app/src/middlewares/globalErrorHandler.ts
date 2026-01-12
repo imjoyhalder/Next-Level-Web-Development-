@@ -19,13 +19,37 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
             statusCode = 400;
             errorMessage = "The current database provider doesn't support a feature that the query used"
         }
-        else if(error.code === "P2002"){
-            statusCode = 400; 
+        else if (error.code === "P2002") {
+            statusCode = 400;
             errorMessage = "Unique constraint failed "
         }
-        else if(error.code === "P2003"){
-            statusCode = 400; 
+        else if (error.code === "P2003") {
+            statusCode = 400;
             errorMessage = "Foreign key constraint failed"
+        }
+    }
+
+    //PrismaClientUnknownRequestError
+    else if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+        statusCode = 500
+        errorMessage = "Error occurred during query execution"
+    }
+
+    //PrismaClientRustPanicError
+    else if (error instanceof Prisma.PrismaClientRustPanicError) {
+        statusCode = 500
+        errorMessage = "Prisma engine crashes and exits"
+    }
+
+    //PrismaClientInitializationError
+    else if (error instanceof Prisma.PrismaClientInitializationError) {
+        if (error.errorCode === "P1000") {
+            statusCode = 401
+            errorMessage = "Authentication failed please check your credentials!"
+        }
+        else if (error.errorCode === "P1001") {
+            statusCode = 400
+            errorMessage = "Can't reach database server"
         }
     }
 
