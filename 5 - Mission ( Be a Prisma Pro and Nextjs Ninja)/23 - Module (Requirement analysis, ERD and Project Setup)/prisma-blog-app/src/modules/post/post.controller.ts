@@ -1,12 +1,12 @@
 
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { postService } from "./post.service";
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { paginationSortingHelper } from '../../helpers/paginationSortingHelper';
 
 
 
-const createPost = async (req: Request, res: Response) => {
+const createPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         if (!req?.user) {
@@ -19,10 +19,7 @@ const createPost = async (req: Request, res: Response) => {
         res.status(201).json(result)
 
     } catch (error: any) {
-        res.status(400).json({
-            error: "Post creation failed",
-            details: error
-        })
+        next(error)
     }
 }
 
