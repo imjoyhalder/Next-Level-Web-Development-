@@ -268,8 +268,8 @@ const deletePost = async (postId: string, authorId: string, isAdmin: boolean) =>
         }
     })
 
-    if ((postData.authorId !== authorId) && !isAdmin){
-        throw new Error("You are not creator of it!")
+    if ((postData.authorId !== authorId) && !isAdmin) {
+        throw new Error("You are not author/creator of it")
     }
 
     return await prisma.post.delete({
