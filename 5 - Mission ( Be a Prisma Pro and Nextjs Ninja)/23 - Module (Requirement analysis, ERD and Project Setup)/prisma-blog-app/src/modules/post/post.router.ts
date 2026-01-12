@@ -5,6 +5,7 @@ import auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router()
 
+router.get('/stats', auth(UserRole.ADMIN), PostController.getStats)
 router.get('/', PostController.getAllPost)
 router.get("/:postId", PostController.getPostById)
 router.get("/my-posts/author", auth(UserRole.USER, UserRole.ADMIN), PostController.getMyPost)

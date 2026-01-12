@@ -3,7 +3,7 @@ import { Request, Response } from "express"
 import { postService } from "./post.service";
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { paginationSortingHelper } from '../../helpers/paginationSortingHelper';
-import { prisma } from "../../lib/prisma";
+
 
 
 const createPost = async (req: Request, res: Response) => {
@@ -156,11 +156,26 @@ const deletePost = async (req: Request, res: Response) => {
     }
 }
 
+const getStats = async (req: Request, res: Response) => {
+    try {
+        const result = await postService.getStats()
+        res.status(200).json(result)
+    } catch (error) {
+        const errorMessage =
+            error instanceof Error ? error.message : "Stats fetched failed"
+        return res.status(400).json({
+            success: false,
+            error: errorMessage,
+        });
+    }
+}
+
 export const PostController = {
     createPost,
     getAllPost,
     getPostById,
     getMyPost,
     updatePost,
-    deletePost
+    deletePost,
+    getStats
 }
