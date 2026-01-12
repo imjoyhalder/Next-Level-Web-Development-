@@ -5,13 +5,14 @@ import { auth } from "./lib/auth";
 import cors from "cors"
 import { commentRouter } from "./modules/comment/comment.router";
 import errorHandler from "./middlewares/globalErrorHandler";
+import { notFound } from "./middlewares/notFound";
 
 const app: Application = express()
 
 app.use(cors({
     origin: [
-        process.env.APP_URL||'http://localhost:5000'
-    ], 
+        process.env.APP_URL || 'http://localhost:5000'
+    ],
     credentials: true
 }))
 
@@ -29,8 +30,10 @@ app.get('/', (req: Request, res: Response) => {
         path: req.path
     })
 })
+app.use(notFound)
 
 app.use(errorHandler)
+
 
 
 export default app; 
