@@ -14,8 +14,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { VersionSwitcher } from "./version-switcher"
-import { SearchForm } from "./search-form"
+import Link from "next/link"
+// import { VersionSwitcher } from "./version-switcher"
+// import { SearchForm } from "./search-form"
 
 // This is sample data.
 const data = {
@@ -25,13 +26,14 @@ const data = {
       title: "Getting Started",
       url: "#",
       items: [
+
         {
-          title: "Write Blog",
-          url: "/dashboard/write-blog",
+          title: "User Dashboard",
+          url: "/dashboard",
         },
         {
-          title: "Analytics",
-          url: "/dashboard/analytics",
+          title: "Admin Dashboard",
+          url: "/admin-dashboard",
         },
       ],
     },
@@ -51,7 +53,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
+                      <Link href={item.url}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
