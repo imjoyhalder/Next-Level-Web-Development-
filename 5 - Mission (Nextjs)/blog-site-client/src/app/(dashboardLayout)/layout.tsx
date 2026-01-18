@@ -14,13 +14,13 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-export default function DashboardLayout({ admin, user }: {  admin: React.ReactNode, user: React.ReactNode }) {
-    
-    const userInfo = {role: "admin"}
+export default function DashboardLayout({ admin, user }: { admin: React.ReactNode, user: React.ReactNode }) {
+
+    const userInfo = { role: "admin" }
 
     return (
-        <SidebarProvider>
-            <AppSidebar />
+        <SidebarProvider >
+            <AppSidebar user={userInfo} />
             <SidebarInset>
                 <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
                     <SidebarTrigger className="-ml-1" />
@@ -40,7 +40,7 @@ export default function DashboardLayout({ admin, user }: {  admin: React.ReactNo
                     </Breadcrumb>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">
-                    {userInfo.role === "admin"? admin: user}
+                    {userInfo.role === "admin" ? admin : user}
                 </div>
             </SidebarInset>
         </SidebarProvider>
