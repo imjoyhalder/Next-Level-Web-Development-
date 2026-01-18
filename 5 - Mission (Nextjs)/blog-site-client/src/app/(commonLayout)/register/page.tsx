@@ -1,11 +1,12 @@
-import React from 'react';
+import { RegisterForm } from "@/components/register-form";
 
-const RegisterPge = () => {
-    return (
-        <div>
-            <h1>This is register page</h1>
-        </div>
-    );
-};
 
-export default RegisterPge;
+export default function Page() {
+  return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <RegisterForm />
+      </div>
+    </div>
+  )
+}
