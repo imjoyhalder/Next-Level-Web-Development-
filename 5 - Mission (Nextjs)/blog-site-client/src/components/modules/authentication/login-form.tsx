@@ -25,11 +25,14 @@ export function LoginForm({
 
   const handleGoogleLogin = async () => {
     const data = authClient.signIn.social({
-      provider: 'google', 
+      provider: 'google',
       callbackURL: "http://localhost:3000"
     })
     console.log(data);
   }
+
+  const session = authClient.useSession()
+  console.log(session);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -65,8 +68,8 @@ export function LoginForm({
                 <Input id="password" type="password" required />
               </Field>
               <Field>
-                <Button  type="submit">Login</Button>
-                <Button onClick={()=> handleGoogleLogin()} variant="outline" type="button">
+                <Button type="submit">Login</Button>
+                <Button onClick={() => handleGoogleLogin()} variant="outline" type="button">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
