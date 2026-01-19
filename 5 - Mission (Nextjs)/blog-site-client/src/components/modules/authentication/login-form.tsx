@@ -25,8 +25,10 @@ export function LoginForm({
 
   const handleGoogleLogin = async () => {
     const data = authClient.signIn.social({
-      provider: 'google'
+      provider: 'google', 
+      callbackURL: "http://localhost:3000"
     })
+    console.log(data);
   }
 
   return (
@@ -63,8 +65,8 @@ export function LoginForm({
                 <Input id="password" type="password" required />
               </Field>
               <Field>
-                <Button onClick={()=> handleGoogleLogin()} type="submit">Login</Button>
-                <Button variant="outline" type="button">
+                <Button  type="submit">Login</Button>
+                <Button onClick={()=> handleGoogleLogin()} variant="outline" type="button">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
