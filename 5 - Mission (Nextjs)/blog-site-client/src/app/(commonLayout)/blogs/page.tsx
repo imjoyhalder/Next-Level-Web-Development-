@@ -1,6 +1,9 @@
-import React from 'react';
+import { userService } from '@/services/user.service';
 
-const BlogPage = () => {
+
+const BlogPage = async() => {
+    const session = await  userService.getSession()
+    console.log(session);
     return (
         <div>
             
