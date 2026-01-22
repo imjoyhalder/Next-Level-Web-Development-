@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
-import { Provider } from "@radix-ui/react-tooltip"
+
 
 export function LoginForm({
   className,
@@ -31,8 +31,8 @@ export function LoginForm({
     console.log(data);
   }
 
-  const session = authClient.useSession()
-  console.log(session);
+  // const session = authClient.useSession()
+  // console.log(session);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
