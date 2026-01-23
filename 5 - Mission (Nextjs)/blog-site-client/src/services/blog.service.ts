@@ -16,7 +16,7 @@ interface GetBlogParams {
 }
 
 export const blogService = {
-    getBlogPost: async (params?: GetBlogParams, options?: ServiceOptions ) => {
+    getBlogPost: async (params?: GetBlogParams, options?: ServiceOptions) => {
         try {
 
             const url = new URL(`${API_URL}/posts`)
@@ -35,12 +35,12 @@ export const blogService = {
 
             const config: RequestInit = {}
 
-            if(options?.cache){
+            if (options?.cache) {
                 config.cache = options.cache
             }
 
-            if(options?.revalidate){
-                config.next = {revalidate: options.revalidate}
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate }
             }
 
             const res = await fetch(url.toString(), config)
@@ -48,6 +48,17 @@ export const blogService = {
 
             return { data: data, error: null }
 
+        } catch (error) {
+            return { data: null, error: { message: error } }
+        }
+    },
+
+    getBlogById: async (id: string) => {
+        try {
+            const res = await fetch(`${API_URL}/posts/${id}`)
+            const data = await res.json()
+
+            return { data: data, error: null }
         } catch (error) {
             return { data: null, error: { message: error } }
         }
