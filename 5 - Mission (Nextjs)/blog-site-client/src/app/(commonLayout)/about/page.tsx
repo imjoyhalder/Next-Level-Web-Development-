@@ -14,7 +14,7 @@ export default function AboutPage() {
             setData(data)
         })()
     }, [])
-    console.log(data);
+    // console.log(data);
 
     return (
         <div className="text-4xl">this is the about page</div>
