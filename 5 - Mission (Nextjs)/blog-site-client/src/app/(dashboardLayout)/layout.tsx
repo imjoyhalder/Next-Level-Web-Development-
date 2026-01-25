@@ -20,7 +20,7 @@ export default async function DashboardLayout({ admin, user }: { admin: React.Re
 
     const {data} = await userService.getSession()
 
-    console.log("Data from dashboard layout", data);
+    // console.log("Data from dashboard layout", data);
 
     const userInfo = data?.user
 
