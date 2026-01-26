@@ -15,6 +15,7 @@ interface GetBlogParams {
     search?: string
 }
 
+
 export const blogService = {
     getBlogPost: async (params?: GetBlogParams, options?: ServiceOptions) => {
         try {
@@ -43,7 +44,14 @@ export const blogService = {
                 config.next = { revalidate: options.revalidate }
             }
 
-            const res = await fetch(url.toString(), config)
+            config.next = {...config.next, tags: ["blogPosts"]}
+
+            // const res = await fetch(url.toString(), {
+            //     next: {
+            //         tags: ['blogPost']
+            //     }
+            // })
+            const res = await fetch(url.toString(),config)
             const data = await res.json()
 
             return { data: data, error: null }
