@@ -41,7 +41,7 @@ const CreateBlogFormServer = () => {
     }
 
     return (
-        <Card className='max-w-2xl mx-auto'>
+        <Card className='max-w-3xl mx-auto'>
             <CardHeader>
                 <CardTitle>Create Blog</CardTitle>
                 <CardDescription>You can write your blog here</CardDescription>
