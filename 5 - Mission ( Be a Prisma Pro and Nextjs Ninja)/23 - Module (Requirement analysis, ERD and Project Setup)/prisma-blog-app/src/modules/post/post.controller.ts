@@ -16,7 +16,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const result = await postService.createPost(req.body, req.user?.id as string)
-        res.status(201).json(result)
+        return res.status(201).json(result)
 
     } catch (error: any) {
         next(error)

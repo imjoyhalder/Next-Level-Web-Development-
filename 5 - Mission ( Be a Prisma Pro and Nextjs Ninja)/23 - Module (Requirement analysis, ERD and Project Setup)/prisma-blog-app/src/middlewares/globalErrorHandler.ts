@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { error } from "node:console";
 import { Prisma } from "../../generated/prisma/client";
 
 const errorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {

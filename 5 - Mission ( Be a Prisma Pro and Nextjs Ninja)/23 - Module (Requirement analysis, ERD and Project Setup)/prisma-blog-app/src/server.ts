@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import app from "./app";
 import { prisma } from "./lib/prisma";
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 const main = async () => {
     try {
 

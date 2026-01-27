@@ -2,8 +2,6 @@
 import { PostWhereInput, Result } from './../../../generated/prisma/internal/prismaNamespace';
 import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { title } from 'node:process';
-import { tuple } from 'better-auth/*';
 import { UserRole } from '../../middlewares/auth';
 
 const createPost = async (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>, userId: string) => {
