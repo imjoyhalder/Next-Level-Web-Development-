@@ -48,7 +48,7 @@ export const auth = betterAuth({
       try {
         const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`
         const info = await transporter.sendMail({
-          from: '"Prisma Blog" <prismablog@ph.com>',
+          from: '"MediCorner" <medicorner@gmail.com>',
           to: user.email,
           subject: "Please verify email",
           html: `<!DOCTYPE html>
