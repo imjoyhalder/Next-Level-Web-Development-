@@ -1,7 +1,11 @@
+import { Request } from 'express';
 import { betterAuth, string } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import nodemailer from "nodemailer"
+
+export const ALLOWED_SIGNUP_ROLES = ["CUSTOMER", "SELLER"] as const;
+type SignupRole = typeof ALLOWED_SIGNUP_ROLES[number];
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -36,6 +40,7 @@ export const auth = betterAuth({
       }
     }
   },
+
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
